@@ -1,12 +1,5 @@
-# 贡献者：{吴翔 QQ：99456786}
-# tensorflow版本基于0.12
-# 源代码出处：
-# 数据集下载地址：{http://yann.lecun.com/exdb/mnist/}
-# 数据集下载到本地后存储的路径："D:\tensorflow\Data_sets\MNIST_data"
-'''
-A Convolutional Network implementation example using TensorFlow library.
-This example is using the MNIST database of handwritten digits
-'''
+#-*- coding:utf-8 -*_
+
 
 #加载数据
 
@@ -15,7 +8,10 @@ import tensorflow as tf
 
 # 输入数据
 from tensorflow.examples.tutorials.mnist import input_data
-mnist = input_data.read_data_sets("/tmp/data", one_hot=True)    #TensorFlow 自带，用来下载并返回 mnist 数据。
+#TensorFlow 自带，用来下载并返回 mnist 数据。可以自己下载 mnist数据后，存放到指定目录，我这里是 /tmp/data 目录。
+#其实如果没有下载数据，TensorFlow 也会帮你自动下载 mnist 数据存放到你指定的目录当中。
+#mnist 数据下载地址：http://yann.lecun.com/exdb/mnist/
+mnist = input_data.read_data_sets("/tmp/data", one_hot=True)
 
 # 定义网络的超参数
 learning_rate = 0.001
@@ -105,8 +101,6 @@ def alex_net(x, weights, biases, dropout):
     # 第三层卷积
     # 卷积
     conv3 = conv2d('conv3', norm2, weights['wc3'], biases['bc3'])
-    #下采样
-    #pool3 = maxpool2d('pool3', conv3, k=2)
     # 规范化
     norm3 = norm('norm3', conv3, lsize=4)
 
@@ -145,8 +139,8 @@ def alex_net(x, weights, biases, dropout):
 pred = alex_net(x, weights, biases, keep_prob)
 
 # 定义损失函数和优化器
-#cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(pred, y))
-cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=pred, labels=y))
+cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=pred, labels=y)) 
+#这里定义损失函数时调用tf.nn.softmax_cross_entropy_with_logits() 函数必须使用参数命名的方式来调用 (logits=pred, labels=y)不然会报错。
 optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
 
 # 评估函数
